@@ -70,7 +70,7 @@ const useInitUserAddForm = () => {
         role: yup.string()
             .oneOf([ // The select input should have one of these values.
                 UserRoleEnum.Admin,
-                UserRoleEnum.Personnel,
+                // UserRoleEnum.Personnel,
                 UserRoleEnum.Client
             ])
             .required(formatMessage(

@@ -13,6 +13,13 @@
  */
 
 import { mapValues } from '../runtime';
+import type { UserProfileDTO } from './UserProfileDTO';
+import {
+    UserProfileDTOFromJSON,
+    UserProfileDTOFromJSONTyped,
+    UserProfileDTOToJSON,
+    UserProfileDTOToJSONTyped,
+} from './UserProfileDTO';
 import type { UserRoleEnum } from './UserRoleEnum';
 import {
     UserRoleEnumFromJSON,
@@ -51,6 +58,12 @@ export interface UserDTO {
      * @memberof UserDTO
      */
     role: UserRoleEnum;
+    /**
+     * 
+     * @type {UserProfileDTO}
+     * @memberof UserDTO
+     */
+    profile?: UserProfileDTO | null;
 }
 
 
@@ -80,6 +93,7 @@ export function UserDTOFromJSONTyped(json: any, ignoreDiscriminator: boolean): U
         'name': json['name'],
         'email': json['email'],
         'role': UserRoleEnumFromJSON(json['role']),
+        'profile': json['profile'] == null ? undefined : UserProfileDTOFromJSON(json['profile']),
     };
 }
 
@@ -98,6 +112,7 @@ export function UserDTOToJSONTyped(value?: UserDTO | null, ignoreDiscriminator: 
         'name': value['name'],
         'email': value['email'],
         'role': UserRoleEnumToJSON(value['role']),
+        'profile': UserProfileDTOToJSON(value['profile']),
     };
 }
 
