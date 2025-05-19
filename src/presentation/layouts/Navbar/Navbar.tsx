@@ -57,18 +57,26 @@ export const Navbar = () => {
                 </Button>
               </div>
             </>}
-            <div className="-col-end-2 col-span-1">
+            <div className="-col-end-3 col-span-1">
               <NavbarLanguageSelector/>
             </div>
-            <div className="-col-end-1 col-span-1">
+            <div className="-col-end-2 col-span-1">
               {!loggedIn && <Button color="inherit">  {/* If the user is not logged in show a button that redirects to the login page. */}
                 <Link style={{color: 'white'}} to={AppRoute.Login}>
                   {formatMessage({id: "globals.login"})}
                 </Link>
               </Button>}
+
               {loggedIn && <Button onClick={logout} color="inherit"> {/* Otherwise show the logout button. */}
                 {formatMessage({id: "globals.logout"})}
               </Button>}
+            </div>
+            <div className="-col-end-1 col-span-1">
+                <Button color="inherit">
+                    <Link style={{color: 'white'}} to={AppRoute.Register}>
+                    {formatMessage({id: "globals.register"})}
+                    </Link>
+                </Button>
             </div>
           </div>
         </Toolbar>
