@@ -34,6 +34,7 @@ models/ProjectDTOPagedResponse.ts
 models/ProjectDTOPagedResponseRequestResponse.ts
 models/ProjectDTORequestResponse.ts
 models/ProjectUpdateDTO.ts
+models/RegisterDTO.ts
 models/RequestResponse.ts
 models/UserAddDTO.ts
 models/UserDTO.ts

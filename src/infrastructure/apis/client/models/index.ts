@@ -27,6 +27,7 @@ export * from './ProjectDTOPagedResponse';
 export * from './ProjectDTOPagedResponseRequestResponse';
 export * from './ProjectDTORequestResponse';
 export * from './ProjectUpdateDTO';
+export * from './RegisterDTO';
 export * from './RequestResponse';
 export * from './UserAddDTO';
 export * from './UserDTO';

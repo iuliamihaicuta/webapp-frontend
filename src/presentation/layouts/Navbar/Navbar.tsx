@@ -41,6 +41,18 @@ export const Navbar = () => {
                 </IconButton>
               </Link>
             </div>
+            {loggedIn && (
+                <>
+                  {/* If the user is logged in show a button that redirects to the profile page. */}
+                  <div className="col-span-1">
+                    <Button color="inherit">
+                      <Link style={{ color: 'white' }} to={AppRoute.Profile}>
+                        {formatMessage({ id: "globals.profile" })}
+                      </Link>
+                    </Button>
+                  </div>
+                </>
+            )}
             {isAdmin && <> { /*If the user is logged in and it is an admin they can have new menu items shown.*/ }
               <div className="col-span-1">
                 <Button color="inherit">
@@ -53,6 +65,13 @@ export const Navbar = () => {
                 <Button color="inherit">
                   <Link style={{color: 'white'}} to={AppRoute.UserFiles}>
                     {formatMessage({id: "globals.files"})}
+                  </Link>
+                </Button>
+              </div>
+              <div className="col-span-1">
+                <Button color="inherit">
+                  <Link style={{color: 'white'}} to={AppRoute.Organizations}>
+                    {formatMessage({id: "globals." + "organizations"})}
                   </Link>
                 </Button>
               </div>
@@ -72,11 +91,11 @@ export const Navbar = () => {
               </Button>}
             </div>
             <div className="-col-end-1 col-span-1">
-                <Button color="inherit">
+              {!loggedIn && <Button color="inherit">
                     <Link style={{color: 'white'}} to={AppRoute.Register}>
                     {formatMessage({id: "globals.register"})}
                     </Link>
-                </Button>
+                </Button>}
             </div>
           </div>
         </Toolbar>
