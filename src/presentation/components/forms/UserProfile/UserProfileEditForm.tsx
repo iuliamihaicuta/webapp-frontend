@@ -3,7 +3,7 @@ import { FormControl, FormLabel, OutlinedInput, FormHelperText, Button, Stack } 
 import { useUserProfileFormController } from "./UserProfileEditForm.controller";
 
 export const UserProfileForm: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
-    const { actions, state, computed } = useUserProfileFormController(onSuccess);
+    const { actions, state, computed } = useUserProfileFormController(onSuccess, () => {});
 
     return (
         <form onSubmit={actions.handleSubmit(actions.submit)}>

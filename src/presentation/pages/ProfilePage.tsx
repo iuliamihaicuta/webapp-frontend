@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import { useOwnUser } from "@infrastructure/hooks/useOwnUser";
 import { WebsiteLayout } from "presentation/layouts/WebsiteLayout";
 import { Seo } from "@presentation/components/ui/Seo";
@@ -8,8 +8,18 @@ import { UserProfileForm } from "@presentation/components/forms/UserProfile/User
 import { Button } from "@mui/material";
 
 export const ProfilePage: React.FC = () => {
-    const user = useOwnUser();
+    const initialUser = useOwnUser();
+    const [user, setUser] = useState(initialUser);
     const [isEditing, setIsEditing] = useState(false);
+
+    useEffect(() => {
+        setUser(initialUser); // Actualizează starea când `useOwnUser` se schimbă.
+    }, [initialUser]);
+
+    const refreshUser = () => {
+        const updatedUser = useOwnUser(); // Obține datele actualizate.
+        setUser(updatedUser); // Actualizează starea utilizatorului.
+    };
 
     if (!user) {
         return <p>Loading user data...</p>;
@@ -21,9 +31,9 @@ export const ProfilePage: React.FC = () => {
             <WebsiteLayout>
                 <Box sx={{ padding: "0px 50px 0px 50px", justifyItems: "center" }}>
                     <ContentCard>
-                        <h1>Profile Page</h1>
+                        <h1>Profile</h1>
                         {isEditing ? (
-                            <UserProfileForm onSuccess={() => setIsEditing(false)} />
+                            <UserProfileForm onSuccess={() => setIsEditing(false)} refreshUser={refreshUser} />
                         ) : (
                             <div>
                                 <p><strong>Name:</strong> {user.name}</p>
@@ -44,5 +54,3 @@ export const ProfilePage: React.FC = () => {
         </Fragment>
     );
 };
-
-export default ProfilePage;

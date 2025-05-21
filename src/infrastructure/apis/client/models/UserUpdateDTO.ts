@@ -13,6 +13,14 @@
  */
 
 import { mapValues } from '../runtime';
+import type { UserProfileUpdateDTO } from './UserProfileUpdateDTO';
+import {
+    UserProfileUpdateDTOFromJSON,
+    UserProfileUpdateDTOFromJSONTyped,
+    UserProfileUpdateDTOToJSON,
+    UserProfileUpdateDTOToJSONTyped,
+} from './UserProfileUpdateDTO';
+
 /**
  * 
  * @export
@@ -36,7 +44,19 @@ export interface UserUpdateDTO {
      * @type {string}
      * @memberof UserUpdateDTO
      */
+    email?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserUpdateDTO
+     */
     password?: string | null;
+    /**
+     * 
+     * @type {UserProfileUpdateDTO}
+     * @memberof UserUpdateDTO
+     */
+    profile?: UserProfileUpdateDTO | null;
 }
 
 /**
@@ -59,7 +79,9 @@ export function UserUpdateDTOFromJSONTyped(json: any, ignoreDiscriminator: boole
         
         'id': json['id'],
         'name': json['name'] == null ? undefined : json['name'],
+        'email': json['email'] == null ? undefined : json['email'],
         'password': json['password'] == null ? undefined : json['password'],
+        'profile': json['profile'] == null ? undefined : UserProfileUpdateDTOFromJSON(json['profile']),
     };
 }
 
@@ -76,7 +98,9 @@ export function UserUpdateDTOToJSONTyped(value?: UserUpdateDTO | null, ignoreDis
         
         'id': value['id'],
         'name': value['name'],
+        'email': value['email'],
         'password': value['password'],
+        'profile': UserProfileUpdateDTOToJSON(value['profile']),
     };
 }
 

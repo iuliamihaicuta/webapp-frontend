@@ -1,5 +1,5 @@
 import { useAppSelector } from "@application/store";
-import {Configuration, UserAddDTO, UserApi} from "../client";
+import {ApiUserUpdatePutRequest, Configuration, UserAddDTO, UserApi, UserUpdateDTO} from "../client";
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {isEmpty} from "lodash";
 
@@ -66,6 +66,22 @@ export const useDeleteUser = () => {
         mutationKey: [deleteUserMutationKey, token],
         mutationFn: async (id: string) => {
             const result = await getFactory(token).apiUserDeleteIdDelete({ id });
+            await queryClient.invalidateQueries({queryKey: [getUsersQueryKey]});  // If the form submission succeeds then some other queries need to be refresh so invalidate them to do a refresh.
+            await queryClient.invalidateQueries({queryKey: [getUserQueryKey]});
+
+            return result;
+        }
+    })
+}
+
+export const useUpdateUser = () => {
+    const { token } = useAppSelector(x => x.profileReducer); // You can use the data form the Redux storage.
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationKey: [addUserMutationKey, token],
+        mutationFn: async (userUpdateDTO: UserUpdateDTO) => {
+            const result = await getFactory(token).apiUserUpdatePut({ userUpdateDTO });
             await queryClient.invalidateQueries({queryKey: [getUsersQueryKey]});  // If the form submission succeeds then some other queries need to be refresh so invalidate them to do a refresh.
             await queryClient.invalidateQueries({queryKey: [getUserQueryKey]});
 

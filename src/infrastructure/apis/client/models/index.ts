@@ -40,5 +40,6 @@ export * from './UserFileDTOPagedResponseRequestResponse';
 export * from './UserProfileAddDTO';
 export * from './UserProfileDTO';
 export * from './UserProfileDTORequestResponse';
+export * from './UserProfileUpdateDTO';
 export * from './UserRoleEnum';
 export * from './UserUpdateDTO';

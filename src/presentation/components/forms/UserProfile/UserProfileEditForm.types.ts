@@ -1,4 +1,5 @@
 export interface UserProfileFormModel {
+    id: string;
     name: string;
     email: string;
     bio?: string;

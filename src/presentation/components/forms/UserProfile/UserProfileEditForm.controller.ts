@@ -4,8 +4,10 @@ import * as yup from "yup";
 import { useCallback } from "react";
 import { UserProfileFormModel, UserProfileFormController } from "./UserProfileEditForm.types";
 import { useOwnUser } from "@infrastructure/hooks/useOwnUser";
+import { useUpdateUser } from "@infrastructure/apis/api-management";
 
 const schema = yup.object().shape({
+    id: yup.string().required("ID is required"),
     name: yup.string().required("Name is required"),
     email: yup.string().email("Invalid email").required("Email is required"),
     bio: yup.string(),
@@ -13,29 +15,46 @@ const schema = yup.object().shape({
     phoneNumber: yup.string(),
 });
 
-export const useUserProfileFormController = (onSuccess: () => void): UserProfileFormController => {
+export const useUserProfileFormController = (onSuccess: () => void, refreshUser: () => void): UserProfileFormController => {
     const user = useOwnUser();
 
-    const { register, handleSubmit, formState: { errors }, watch } = useForm<UserProfileFormModel>({
+    const { mutateAsync: updateUser} = useUpdateUser();
+
+    const form = useForm<UserProfileFormModel>({
         resolver: yupResolver(schema),
         defaultValues: {
-            name: user?.name || "",
-            email: user?.email || "",
+            id: user?.id,
+            name: user?.name,
+            email: user?.email,
             bio: user?.profile?.bio || "",
             address: user?.profile?.address || "",
             phoneNumber: user?.profile?.phoneNumber || "",
         },
     });
 
-    const submit = useCallback((data: UserProfileFormModel) => {
-        console.log("Form submitted:", data);
-        // Add API call logic here
-        onSuccess(); // Call the callback to exit edit mode
-    }, [onSuccess]);
+    const handleSubmit = form.handleSubmit;
+
+    const submit = useCallback(async (data: UserProfileFormModel) => {
+        try {
+            await updateUser(data);
+            onSuccess();
+            refreshUser();
+        } catch (error) {
+            console.error("Error updating user:", error);
+        }
+    }, [updateUser, onSuccess, refreshUser]);
 
     return {
-        actions: { register, handleSubmit, submit },
-        state: { errors },
-        computed: { isSubmitting: false }, // Replace with actual submission state if needed
+        actions: {
+            register: form.register,
+            handleSubmit,
+            submit,
+        },
+        state: {
+            errors: form.formState.errors,
+        },
+        computed: {
+            isSubmitting: form.formState.isSubmitting,
+        },
     };
 };
