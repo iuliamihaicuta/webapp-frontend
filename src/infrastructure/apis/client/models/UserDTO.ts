@@ -63,7 +63,7 @@ export interface UserDTO {
      * @type {UserProfileDTO}
      * @memberof UserDTO
      */
-    profile?: UserProfileDTO | null;
+    profile: UserProfileDTO;
 }
 
 
@@ -76,6 +76,7 @@ export function instanceOfUserDTO(value: object): value is UserDTO {
     if (!('name' in value) || value['name'] === undefined) return false;
     if (!('email' in value) || value['email'] === undefined) return false;
     if (!('role' in value) || value['role'] === undefined) return false;
+    if (!('profile' in value) || value['profile'] === undefined) return false;
     return true;
 }
 
@@ -93,7 +94,7 @@ export function UserDTOFromJSONTyped(json: any, ignoreDiscriminator: boolean): U
         'name': json['name'],
         'email': json['email'],
         'role': UserRoleEnumFromJSON(json['role']),
-        'profile': json['profile'] == null ? undefined : UserProfileDTOFromJSON(json['profile']),
+        'profile': UserProfileDTOFromJSON(json['profile']),
     };
 }
 

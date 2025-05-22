@@ -16,6 +16,7 @@
     "globals.users": "Users",
     "globals.profile": "Profile",
     "globals.files": "Files",
+    "globals.id": "ID",
     "globals.organizations": "Organizations",
     "globals.name": "Name",
     "globals.role": "Role",

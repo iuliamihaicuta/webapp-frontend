@@ -17,6 +17,7 @@
     "globals.files": "Fisiere",
     "globals.organizations": "Organizatii",
     "globals.name": "Nume",
+    "globals.id": "ID",
     "globals.profile": "Profil",
     "globals.role": "Rol",
     "globals.admin": "Administrator",

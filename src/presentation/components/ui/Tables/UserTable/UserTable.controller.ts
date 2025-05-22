@@ -7,19 +7,20 @@ import { usePaginationController } from "../Pagination.controller";
 /**
  * This is controller hook manages the table state including the pagination and data retrieval from the backend.
  */
-export const useUserTableController = () => {
-    const queryClient = useQueryClient(); // Get the query client.
-    const { page, pageSize, setPagination } = usePaginationController(); // Get the pagination state.
-    const { data, isError, isLoading, queryKey } = useGetUsers(page, pageSize); // Retrieve the table page from the backend via the query hook.
-    const { mutateAsync: remove } = useDeleteUser(); // Use a mutation to remove an entry.
+export const useUserTableController = (search: string) => {
+    const queryClient = useQueryClient();
+    const { page, pageSize, setPagination } = usePaginationController();
+    const { data, isError, isLoading, queryKey } = useGetUsers(page, pageSize, search); // Pass search to the query hook
+    const { mutateAsync: remove } = useDeleteUser();
 
     const tryReload = useCallback(
         () => queryClient.invalidateQueries({ queryKey: [queryKey] }),
-        [queryClient, queryKey]); // Create a callback to try reloading the data for the table via query invalidation.
+        [queryClient, queryKey]
+    );
 
-    const tableController = useTableController(setPagination, data?.response?.pageSize); // Adapt the pagination for the table.
+    const tableController = useTableController(setPagination, data?.response?.pageSize);
 
-    return { // Return the controller state and actions.
+    return {
         ...tableController,
         tryReload,
         pagedData: data?.response,
@@ -27,4 +28,4 @@ export const useUserTableController = () => {
         isLoading,
         remove
     };
-}
+};

@@ -1,76 +1,106 @@
+import { useState } from "react";
+import { TextField, IconButton, TablePagination } from "@mui/material";
+import SearchIcon from '@mui/icons-material/Search';
 import { useIntl } from "react-intl";
 import { isUndefined } from "lodash";
-import { IconButton, TablePagination } from "@mui/material";
 import { DataLoadingContainer } from "../../LoadingDisplay";
 import { useUserTableController } from "./UserTable.controller";
 import { UserDTO } from "@infrastructure/apis/client";
 import DeleteIcon from '@mui/icons-material/Delete';
 import { UserAddDialog } from "../../Dialogs/UserAddDialog";
 import { useAppSelector } from "@application/store";
-import {DataTable} from "@presentation/components/ui/Tables/DataTable";
+import { DataTable } from "@presentation/components/ui/Tables/DataTable";
 
-/**
- * This hook returns a header for the table with translated columns.
- */
 const useHeader = (): { key: keyof UserDTO, name: string, order: number }[] => {
     const { formatMessage } = useIntl();
 
     return [
         { key: "name", name: formatMessage({ id: "globals.name" }), order: 1 },
         { key: "email", name: formatMessage({ id: "globals.email" }), order: 2 },
-        { key: "role", name: formatMessage({ id: "globals.role" }), order: 3 }
-    ]
+        { key: "role", name: formatMessage({ id: "globals.role" }), order: 3 },
+    ];
 };
 
-/**
- * The values in the table are organized as rows so this function takes the entries and creates the row values ordering them according to the order map.
- */
 const getRowValues = (entries: UserDTO[] | null | undefined, orderMap: { [key: string]: number }) =>
-    entries?.map(
-        entry => {
-            return {
-                entry: entry,
-                data: Object.entries(entry).filter(([e]) => !isUndefined(orderMap[e])).sort(([a], [b]) => orderMap[a] - orderMap[b]).map(([key, value]) => { return { key, value } })
-            }
-        });
+    entries?.map(entry => ({
+        entry: entry,
+        data: Object.entries(entry)
+            .filter(([e]) => !isUndefined(orderMap[e]))
+            .sort(([a], [b]) => orderMap[a] - orderMap[b])
+            .map(([key, value]) => ({ key, value }))
+    }));
 
-/**
- * Creates the user table.
- */
 export const UserTable = () => {
     const { userId: ownUserId } = useAppSelector(x => x.profileReducer);
     const { formatMessage } = useIntl();
     const header = useHeader();
-    const { handleChangePage, handleChangePageSize, pagedData, isError, isLoading, tryReload, labelDisplay, remove } = useUserTableController(); // Use the controller hook.
+    const [search, setSearch] = useState(""); // Add search state
+    const { handleChangePage, handleChangePageSize, pagedData, isError, isLoading, tryReload, labelDisplay, remove } = useUserTableController(search); // Pass search to the controller
 
-    return <DataLoadingContainer isError={isError} isLoading={isLoading} tryReload={tryReload}> {/* Wrap the table into the loading container because data will be fetched from the backend and is not immediately available.*/}
-        <UserAddDialog /> {/* Add the button to open the user add modal. */}
-        {!isUndefined(pagedData) && !isUndefined(pagedData?.totalCount) && !isUndefined(pagedData?.page) && !isUndefined(pagedData?.pageSize) &&
-            <TablePagination // Use the table pagination to add the navigation between the table pages.
-                component="div"
-                count={pagedData.totalCount} // Set the entry count returned from the backend.
-                page={pagedData.totalCount !== 0 ? pagedData.page - 1 : 0} // Set the current page you are on.
-                onPageChange={handleChangePage} // Set the callback to change the current page.
-                rowsPerPage={pagedData.pageSize} // Set the current page size.
-                onRowsPerPageChange={handleChangePageSize} // Set the callback to change the current page size. 
-                labelRowsPerPage={formatMessage({ id: "labels.itemsPerPage" })}
-                labelDisplayedRows={labelDisplay}
-                showFirstButton
-                showLastButton
-            />}
+    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSearch(event.target.value); // Update search state
+        tryReload(); // Reload data with the new search term
+    };
 
-        <DataTable data={pagedData?.data ?? []}
-                   header={header}
-                   extraHeader={[{
-                       key: "actions",
-                       name: formatMessage({ id: "labels.actions" }),
-                       render: entry => <>
-                       {entry.id !== ownUserId && <IconButton color="error" onClick={() => remove(entry.id || '')}>
-                                                       <DeleteIcon color="error" fontSize='small' />
-                                                   </IconButton>
-                       }</>,
-                       order: 4
-                   }]}
-        />
-    </DataLoadingContainer >
-}
+    return (
+        <DataLoadingContainer isError={isError} isLoading={isLoading} tryReload={tryReload}>
+            {/*<UserAddDialog />*/}
+            {/*<div style={{ display: "flex", alignItems: "center", marginBottom: "1rem" }}>*/}
+            {/*    <TextField*/}
+            {/*        label={formatMessage({ id: "labels.search" })}*/}
+            {/*        variant="outlined"*/}
+            {/*        size="small"*/}
+            {/*        value={search}*/}
+            {/*        onChange={handleSearchChange}*/}
+            {/*        style={{ marginRight: "1rem" }}*/}
+            {/*    />*/}
+            {/*    <IconButton onClick={tryReload}>*/}
+            {/*        <SearchIcon />*/}
+            {/*    </IconButton>*/}
+            {/*</div>*/}
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
+                <UserAddDialog />
+                <div style={{ display: "flex", alignItems: "center" }}>
+                    <TextField
+                        label={formatMessage({ id: "labels.search" })}
+                        variant="outlined"
+                        size="small"
+                        value={search}
+                        onChange={handleSearchChange}
+                        style={{ marginRight: "1rem" }}
+                    />
+                    <IconButton onClick={tryReload}>
+                        <SearchIcon />
+                    </IconButton>
+                </div>
+            </div>
+            {!isUndefined(pagedData) && !isUndefined(pagedData?.totalCount) && !isUndefined(pagedData?.page) && !isUndefined(pagedData?.pageSize) &&
+                <TablePagination
+                    component="div"
+                    count={pagedData.totalCount}
+                    page={pagedData.totalCount !== 0 ? pagedData.page - 1 : 0}
+                    onPageChange={handleChangePage}
+                    rowsPerPage={pagedData.pageSize}
+                    onRowsPerPageChange={handleChangePageSize}
+                    labelRowsPerPage={formatMessage({ id: "labels.itemsPerPage" })}
+                    labelDisplayedRows={labelDisplay}
+                    showFirstButton
+                    showLastButton
+                />}
+            <DataTable
+                data={pagedData?.data ?? []}
+                header={header}
+                extraHeader={[{
+                    key: "actions",
+                    name: formatMessage({ id: "labels.actions" }),
+                    render: entry => <>
+                        {entry.id !== ownUserId && <IconButton color="error" onClick={() => remove(entry.id || '')}>
+                            <DeleteIcon color="error" fontSize='small' />
+                        </IconButton>}
+                    </>,
+                    order: 4
+                }]}
+            />
+        </DataLoadingContainer>
+    );
+};

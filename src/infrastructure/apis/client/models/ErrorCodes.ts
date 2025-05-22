@@ -28,7 +28,8 @@ export const ErrorCodes = {
     CannotUpdate: 'CannotUpdate',
     CannotDelete: 'CannotDelete',
     MailSendFailed: 'MailSendFailed',
-    EntityAlreadyExists: 'EntityAlreadyExists'
+    EntityAlreadyExists: 'EntityAlreadyExists',
+    UserProfileCreationFailed: 'UserProfileCreationFailed'
 } as const;
 export type ErrorCodes = typeof ErrorCodes[keyof typeof ErrorCodes];
 

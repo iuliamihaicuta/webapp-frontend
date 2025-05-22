@@ -8,6 +8,7 @@ import { RegisterPage} from "@presentation/pages/RegisterPage";
 import { UserFilesPage } from "@presentation/pages/UserFilesPage";
 import { UsersPage } from "@presentation/pages/UsersPage";
 import { ProfilePage } from "@presentation/pages/ProfilePage";
+import { OrganizationsPage } from "@presentation/pages/OrganizationsPage";
 import { Route, Routes } from "react-router-dom";
 import { AppRoute } from "routes";
 
@@ -21,7 +22,7 @@ export function App() {
         <Route path={AppRoute.Index} element={<HomePage />} /> {/* Add a new route with a element as the page. */}
         <Route path={AppRoute.Login} element={<LoginPage />} />
         <Route path={AppRoute.Register} element={<RegisterPage />} />
-        {/*<Route path={AppRoute.Organizations} element={<HomePage />} /> /!* This is a placeholder for the organizations page. *!/*/}
+        <Route path={AppRoute.Organizations} element={<OrganizationsPage />} /> {/* This is a placeholder for the organizations page. */}
         <Route path={AppRoute.Profile} element={<ProfilePage />} /> {/* This is a placeholder for the profile page. */}
         {isAdmin && <Route path={AppRoute.Users} element={<UsersPage />} />} {/* If the user doesn't have the right role this route shouldn't be used. */}
         {isAdmin && <Route path={AppRoute.UserFiles} element={<UserFilesPage />} />}
