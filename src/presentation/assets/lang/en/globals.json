@@ -29,5 +29,19 @@
     "globals.file": "File",
     "globals.placeholders.textInput": "Please enter {fieldName}",
     "globals.placeholders.selectInput": "Please select the {fieldName}",
-    "globals.validations.requiredField": "{fieldName} is a required field!"
+    "globals.validations.requiredField": "{fieldName} is a required field!",
+    "globals.projects": "Projects",
+    "globals.feedback": "Feedback",
+    "globals.feedbackTopic": "Feedback topic",
+    "globals.selectTopic": "Select topic",
+    "globals.complaint": "Complaint",
+    "globals.suggestion": "Suggestion",
+    "globals.question": "Question",
+    "globals.experience": "Experience",
+    "globals.good": "Good",
+    "globals.bad": "Bad",
+    "globals.neutral": "Neutral",
+    "globals.subscribe": "Subscribe",
+    "globals.additionalComments": "Additional comments",
+    "globals.submitFeedback": "Submit feedback"
 }

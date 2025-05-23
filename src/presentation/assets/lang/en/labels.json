@@ -7,5 +7,9 @@
     "labels.actions": "Actions",
     "labels.addUser": "Add user",
     "labels.addUserFile": "Add file",
-    "labels.search": "Search"
+    "labels.search": "Search",
+    "labels.delete": "Delete",
+    "labels.cancel": "Cancel",
+    "labels.confirm": "Confirm",
+    "labels.deleteConfirmation": "Are you sure you want to delete this item?"
 }

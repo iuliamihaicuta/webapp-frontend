@@ -10,6 +10,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { UserAddDialog } from "../../Dialogs/UserAddDialog";
 import { useAppSelector } from "@application/store";
 import { DataTable } from "@presentation/components/ui/Tables/DataTable";
+import {OrganizationEditDialog} from "@presentation/components/ui/Dialogs/OrganizationEditDialog";
+import EditIcon from "@mui/icons-material/Edit";
 import {DeleteDialog} from "@presentation/components/ui/Dialogs/DeleteDialog";
 
 const useHeader = (): { key: keyof UserDTO, name: string, order: number }[] => {
@@ -43,6 +45,7 @@ export const UserTable = () => {
         tryReload(); // Reload data with the new search term
     };
 
+    // @ts-ignore
     return (
         <DataLoadingContainer isError={isError} isLoading={isLoading} tryReload={tryReload}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
@@ -88,15 +91,39 @@ export const UserTable = () => {
                                 </IconButton>
                             }
                             onConfirm={() => {
-                                remove(entry.id || '').then(() => {
+                                remove(entry.id || "").then(() => {
                                     tryReload();
                                 });
                             }}
                         />}
                     </>,
+                    // render: (entry) => (
+                    //     <>
+                    //         <OrganizationEditDialog
+                    //             organization={entry}
+                    //             onSave={edit}
+                    //             trigger={
+                    //                 <IconButton color="primary">
+                    //                     <EditIcon fontSize="small" />
+                    //                 </IconButton>
+                    //             }
+                    //         />
+                    //         <DeleteDialog
+                    //             trigger={
+                    //                 <IconButton color="error">
+                    //                     <DeleteIcon fontSize="small" />
+                    //                 </IconButton>
+                    //             }
+                    //             onConfirm={() => {
+                    //                 remove(entry.id || "").then(() => {
+                    //                     tryReload();
+                    //                 });
+                    //             }}
+                    //         />
+                    //     </>),
                     order: 4
                 }]}
             />
         </DataLoadingContainer>
     );
-};
+}

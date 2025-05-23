@@ -29,5 +29,19 @@
     "globals.file": "Fisier",
     "globals.placeholders.textInput": "Va rugam sa introduceti {fieldName}",
     "globals.placeholders.selectInput": "Va rugam sa selectati {fieldName}",
-    "globals.validations.requiredField": "{fieldName} este camp obligatoriu!"
+    "globals.validations.requiredField": "{fieldName} este camp obligatoriu!",
+    "globals.projects": "Proiecte",
+    "globals.feedback": "Feedback",
+    "globals.feedbackTopic": "Subiect feedback",
+    "globals.selectTopic": "Selectati subiectul",
+    "globals.complaint": "Reclamatie",
+    "globals.suggestion": "Sugestie",
+    "globals.question": "Intrebare",
+    "globals.experience": "Experienta",
+    "globals.good": "Buna",
+    "globals.bad": "Rea",
+    "globals.neutral": "Neutra",
+    "globals.subscribe": "Abonare",
+    "globals.additionalComments": "Comentarii suplimentare",
+    "globals.submitFeedback": "Trimite feedback"
 }

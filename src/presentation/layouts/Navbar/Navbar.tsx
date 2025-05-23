@@ -78,10 +78,17 @@ export const Navbar = () => {
               <div className="col-span-1">
                 <Button color="inherit">
                   <Link style={{color: 'white'}} to={AppRoute.Projects}>
-                    {formatMessage({id: "globals." + "projects"})}
+                    {formatMessage({id: "globals.projects"})}
                   </Link>
                 </Button>
               </div>
+                <div className="col-span-1">
+                    <Button color="inherit">
+                    <Link style={{color: 'white'}} to={AppRoute.Feedback}>
+                        {formatMessage({id: "globals." + "feedback"})}
+                    </Link>
+                    </Button>
+                </div>
             </>}
             <div className="-col-end-3 col-span-1">
               <NavbarLanguageSelector/>
