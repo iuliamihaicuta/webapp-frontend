@@ -8,6 +8,7 @@ import { DataTable } from "../DataTable";
 import { useOrganizationTableController } from "./OrganizationTable.controller";
 import { OrganizationAddDialog } from "@presentation/components/ui/Dialogs/OrganizationAddDialog";
 import SearchIcon from "@mui/icons-material/Search";
+import {DeleteDialog} from "@presentation/components/ui/Dialogs/DeleteDialog";
 
 const useHeader = () => {
     const { formatMessage } = useIntl();
@@ -83,9 +84,21 @@ export const OrganizationTable = () => {
                                 <IconButton color="primary" onClick={() => edit(entry.id || "")}>
                                     <EditIcon fontSize="small" />
                                 </IconButton>
-                                <IconButton color="error" onClick={() => remove(entry.id || "")}>
-                                    <DeleteIcon fontSize="small" />
-                                </IconButton>
+                                {/*<IconButton color="error" onClick={() => remove(entry.id || "")}>*/}
+                                {/*    <DeleteIcon fontSize="small" />*/}
+                                {/*</IconButton>*/}
+                                <DeleteDialog
+                                    trigger={
+                                        <IconButton color="error">
+                                            <DeleteIcon fontSize="small" />
+                                        </IconButton>
+                                    }
+                                    onConfirm={() => {
+                                        remove(entry.id || '').then(() => {
+                                            tryReload();
+                                        });
+                                    }}
+                                />
                             </>
                         ),
                         order: 3,

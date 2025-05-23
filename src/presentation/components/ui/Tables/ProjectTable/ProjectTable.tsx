@@ -8,7 +8,8 @@ import { useProjectTableController } from "./ProjectTable.controller";
 import { ProjectDTO } from "@infrastructure/apis/client";
 import { DataLoadingContainer } from "../../LoadingDisplay";
 import { DataTable } from "@presentation/components/ui/Tables/DataTable";
-import { ProjectAddDialog } from "../../Dialogs/ProjectAddDialog"; // opțional
+import { ProjectAddDialog } from "../../Dialogs/ProjectAddDialog";
+import {DeleteDialog} from "@presentation/components/ui/Dialogs/DeleteDialog";
 
 const useHeader = (): { key: keyof ProjectDTO, name: string, order: number }[] => {
     const { formatMessage } = useIntl();
@@ -79,9 +80,21 @@ export const ProjectTable = () => {
                     key: "actions",
                     name: formatMessage({ id: "labels.actions" }),
                     render: entry => (
-                        <IconButton color="error" onClick={() => remove(entry.id || '')}>
-                            <DeleteIcon fontSize="small" />
-                        </IconButton>
+                        // <IconButton color="error" onClick={() => remove(entry.id || '')}>
+                        //     <DeleteIcon fontSize="small" />
+                        // </IconButton>
+                        <DeleteDialog
+                            trigger={
+                                <IconButton color="error">
+                                    <DeleteIcon fontSize="small" />
+                                </IconButton>
+                            }
+                            onConfirm={() => {
+                                remove(entry.id || '').then(() => {
+                                    tryReload();
+                                });
+                            }}
+                        />
                     ),
                     order: 5
                 }]}

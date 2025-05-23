@@ -10,6 +10,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { UserAddDialog } from "../../Dialogs/UserAddDialog";
 import { useAppSelector } from "@application/store";
 import { DataTable } from "@presentation/components/ui/Tables/DataTable";
+import {DeleteDialog} from "@presentation/components/ui/Dialogs/DeleteDialog";
 
 const useHeader = (): { key: keyof UserDTO, name: string, order: number }[] => {
     const { formatMessage } = useIntl();
@@ -80,9 +81,18 @@ export const UserTable = () => {
                     key: "actions",
                     name: formatMessage({ id: "labels.actions" }),
                     render: entry => <>
-                        {entry.id !== ownUserId && <IconButton color="error" onClick={() => remove(entry.id || '')}>
-                            <DeleteIcon color="error" fontSize='small' />
-                        </IconButton>}
+                        {entry.id !== ownUserId && <DeleteDialog
+                            trigger={
+                                <IconButton color="error">
+                                    <DeleteIcon fontSize="small" />
+                                </IconButton>
+                            }
+                            onConfirm={() => {
+                                remove(entry.id || '').then(() => {
+                                    tryReload();
+                                });
+                            }}
+                        />}
                     </>,
                     order: 4
                 }]}
