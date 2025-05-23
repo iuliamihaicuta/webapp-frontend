@@ -1,14 +1,15 @@
 import { useIntl } from "react-intl";
 import { IconButton, TablePagination, TextField } from "@mui/material";
-import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import { useState } from "react";
 import { DataLoadingContainer } from "../../LoadingDisplay";
 import { DataTable } from "../DataTable";
 import { useOrganizationTableController } from "./OrganizationTable.controller";
 import { OrganizationAddDialog } from "@presentation/components/ui/Dialogs/OrganizationAddDialog";
+import { OrganizationEditDialog } from "@presentation/components/ui/Dialogs/OrganizationEditDialog";
 import SearchIcon from "@mui/icons-material/Search";
-import {DeleteDialog} from "@presentation/components/ui/Dialogs/DeleteDialog";
+import { DeleteDialog } from "@presentation/components/ui/Dialogs/DeleteDialog";
 
 const useHeader = () => {
     const { formatMessage } = useIntl();
@@ -81,12 +82,15 @@ export const OrganizationTable = () => {
                         name: formatMessage({ id: "labels.actions" }),
                         render: (entry) => (
                             <>
-                                <IconButton color="primary" onClick={() => edit(entry.id || "")}>
-                                    <EditIcon fontSize="small" />
-                                </IconButton>
-                                {/*<IconButton color="error" onClick={() => remove(entry.id || "")}>*/}
-                                {/*    <DeleteIcon fontSize="small" />*/}
-                                {/*</IconButton>*/}
+                                <OrganizationEditDialog
+                                    organization={entry}
+                                    onSave={edit}
+                                    trigger={
+                                        <IconButton color="primary">
+                                            <EditIcon fontSize="small" />
+                                        </IconButton>
+                                    }
+                                />
                                 <DeleteDialog
                                     trigger={
                                         <IconButton color="error">
@@ -94,7 +98,7 @@ export const OrganizationTable = () => {
                                         </IconButton>
                                     }
                                     onConfirm={() => {
-                                        remove(entry.id || '').then(() => {
+                                        remove(entry.id || "").then(() => {
                                             tryReload();
                                         });
                                     }}
