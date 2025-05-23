@@ -75,6 +75,13 @@ export const Navbar = () => {
                   </Link>
                 </Button>
               </div>
+              <div className="col-span-1">
+                <Button color="inherit">
+                  <Link style={{color: 'white'}} to={AppRoute.Projects}>
+                    {formatMessage({id: "globals." + "projects"})}
+                  </Link>
+                </Button>
+              </div>
             </>}
             <div className="-col-end-3 col-span-1">
               <NavbarLanguageSelector/>

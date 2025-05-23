@@ -1,51 +1,50 @@
 import { useState } from "react";
 import { TextField, IconButton, TablePagination } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { useIntl } from "react-intl";
 import { isUndefined } from "lodash";
+import { useProjectTableController } from "./ProjectTable.controller";
+import { ProjectDTO } from "@infrastructure/apis/client";
 import { DataLoadingContainer } from "../../LoadingDisplay";
-import { useUserTableController } from "./UserTable.controller";
-import { UserDTO } from "@infrastructure/apis/client";
-import DeleteIcon from '@mui/icons-material/Delete';
-import { UserAddDialog } from "../../Dialogs/UserAddDialog";
-import { useAppSelector } from "@application/store";
 import { DataTable } from "@presentation/components/ui/Tables/DataTable";
+import { ProjectAddDialog } from "../../Dialogs/ProjectAddDialog"; // opțional
 
-const useHeader = (): { key: keyof UserDTO, name: string, order: number }[] => {
+const useHeader = (): { key: keyof ProjectDTO, name: string, order: number }[] => {
     const { formatMessage } = useIntl();
 
     return [
-        { key: "name", name: formatMessage({ id: "globals.name" }), order: 1 },
-        { key: "email", name: formatMessage({ id: "globals.email" }), order: 2 },
-        { key: "role", name: formatMessage({ id: "globals.role" }), order: 3 },
+        { key: "title", name: formatMessage({ id: "project.title" }), order: 1 },
+        { key: "location", name: formatMessage({ id: "project.location" }), order: 2 },
+        { key: "startDate", name: formatMessage({ id: "project.startDate" }), order: 3 },
+        { key: "endDate", name: formatMessage({ id: "project.endDate" }), order: 4 },
     ];
 };
 
-const getRowValues = (entries: UserDTO[] | null | undefined, orderMap: { [key: string]: number }) =>
-    entries?.map(entry => ({
-        entry: entry,
-        data: Object.entries(entry)
-            .filter(([e]) => !isUndefined(orderMap[e]))
-            .sort(([a], [b]) => orderMap[a] - orderMap[b])
-            .map(([key, value]) => ({ key, value }))
-    }));
-
-export const UserTable = () => {
-    const { userId: ownUserId } = useAppSelector(x => x.profileReducer);
+export const ProjectTable = () => {
     const { formatMessage } = useIntl();
     const header = useHeader();
-    const [search, setSearch] = useState(""); // Add search state
-    const { handleChangePage, handleChangePageSize, pagedData, isError, isLoading, tryReload, labelDisplay, remove } = useUserTableController(search); // Pass search to the controller
+    const [search, setSearch] = useState("");
+    const {
+        handleChangePage,
+        handleChangePageSize,
+        pagedData,
+        isError,
+        isLoading,
+        tryReload,
+        labelDisplay,
+        remove
+    } = useProjectTableController(search);
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setSearch(event.target.value); // Update search state
-        tryReload(); // Reload data with the new search term
+        setSearch(event.target.value);
+        tryReload();
     };
 
     return (
         <DataLoadingContainer isError={isError} isLoading={isLoading} tryReload={tryReload}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
-                <UserAddDialog />
+                <ProjectAddDialog />
                 <div style={{ display: "flex", alignItems: "center" }}>
                     <TextField
                         label={formatMessage({ id: "labels.search" })}
@@ -79,12 +78,12 @@ export const UserTable = () => {
                 extraHeader={[{
                     key: "actions",
                     name: formatMessage({ id: "labels.actions" }),
-                    render: entry => <>
-                        {entry.id !== ownUserId && <IconButton color="error" onClick={() => remove(entry.id || '')}>
-                            <DeleteIcon color="error" fontSize='small' />
-                        </IconButton>}
-                    </>,
-                    order: 4
+                    render: entry => (
+                        <IconButton color="error" onClick={() => remove(entry.id || '')}>
+                            <DeleteIcon fontSize="small" />
+                        </IconButton>
+                    ),
+                    order: 5
                 }]}
             />
         </DataLoadingContainer>
